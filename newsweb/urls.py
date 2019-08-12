@@ -21,6 +21,7 @@ urlpatterns = [
 	
 	# 功能类
 	url(r'api_download',views.api_download,name='api_download'),
+	# url(r'download',views.download,name='download'),
 	url(r'api_delete_article',views.api_delete_article,name='api_delete_article'),
 
 ]

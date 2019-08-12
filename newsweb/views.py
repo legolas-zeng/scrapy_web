@@ -1,8 +1,9 @@
 from django.shortcuts import render
 from newsweb.models import *
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
-from django.http import HttpResponse,HttpResponseRedirect,JsonResponse,request,Http404
+from django.http import HttpResponse,HttpResponseRedirect,JsonResponse,request,Http404,FileResponse
 import json
+from scripts import downloadexcel
 # Create your views here.
 
 
@@ -82,14 +83,41 @@ def dispaly(request,template="newsweb/dispaly.html"):
 
 @csrf_exempt
 def api_download(request):
-	if request.method == 'POST':
-		req = json.loads(request.body)
-		print(req)
-	context = {
-		'msg': '下载完成',
-		'status': 1
-	}
-	return JsonResponse(context)
+	id = request.GET['id']
+	article = request.GET['article']
+	print(id, article)
+	if article == 'mondaq':
+		data = mondaq.objects.filter(id=id).values()
+		excel_name = 'mondaq_'+id
+		filepath = downloadexcel.HandleData(data[0],excel_name)
+	elif article == 'osac':
+		data = osac.objects.filter(id=id)
+	elif article == 'grada':
+		data = grada.objects.filter(id=id)
+	elif article == 'cnn':
+		data = cnn.objects.filter(id=id)
+	elif article == 'anvilgroup':
+		data = anvilgroup.objects.filter(id=id)
+	
+	file = open(filepath, 'rb')
+	response = FileResponse(file)
+	response['Content-Type'] = 'application/octet-stream'
+	response['Content-Disposition'] = 'attachment;filename="%s.xls"'%excel_name
+	return response
+
+# def download(request):
+# 	file = open('C:\\Users\Administrator\Desktop\\mondaq_2.xls', 'rb')
+# 	response = FileResponse(file)
+# 	response['Content-Type'] = 'application/octet-stream'
+# 	response['Content-Disposition'] = 'attachment;filename="mondaq_2.xls"'
+# 	return response
+
+def download_file(request):
+    file = open('/home/logs/log.txt', 'rb')
+    response = FileResponse(file)
+    response['Content-Type'] = 'application/octet-stream'
+    response['Content-Disposition'] = 'attachment;filename="log.txt"'
+    return response
 
 def api_delete_article():
 	pass
