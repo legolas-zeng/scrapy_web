@@ -7,7 +7,6 @@ from scripts import downloadexcel,handletranslate
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.core.urlresolvers import reverse
-# Create your views here.
 
 
 @csrf_exempt
