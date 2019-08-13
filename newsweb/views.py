@@ -61,11 +61,19 @@ def grada_list(request,template="newsweb/grada.html"):
 	}
 	return render(request, template, context)
 
-def cnn_list(request,template="newsweb/osac.html"):
-	return render(request, template)
+def cnn_list(request,template="newsweb/cnn.html"):
+	data = cnn.objects.all().values()
+	context = {
+		'data': data
+	}
+	return render(request, template, context)
 
-def anvilgroup_list(request,template="newsweb/osac.html"):
-	return render(request, template)
+def anvilgroup_list(request,template="newsweb/anvilgroup.html"):
+	data = anvilgroup.objects.all().values()
+	context = {
+		'data': data
+	}
+	return render(request, template, context)
     
 
 def dispaly(request,template="newsweb/dispaly.html"):
