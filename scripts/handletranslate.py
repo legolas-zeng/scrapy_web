@@ -15,15 +15,18 @@ def handledata(id,article:str):
 		data = osac.objects.filter(id=id).values()
 		tran_title,tran_content = Translated(data[0])
 	elif article == 'grada':
-		data = grada.objects.filter(id=id)
+		data = grada.objects.filter(id=id).values()
+		tran_title, tran_content = Translated(data[0])
 	elif article == 'cnn':
-		data = cnn.objects.filter(id=id)
+		data = cnn.objects.filter(id=id).values()
+		tran_title, tran_content = Translated(data[0])
 	elif article == 'anvilgroup':
-		data = anvilgroup.objects.filter(id=id)
+		data = anvilgroup.objects.filter(id=id).values()
+		tran_title, tran_content = Translated(data[0])
 	return tran_title,tran_content
 
 		
-def Translated(data:dict):
+def Translated(data):
 	title = data.get("title")
 	content = data.get('content')
 	# print(content)

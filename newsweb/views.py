@@ -54,8 +54,12 @@ def osac_list(request,template="newsweb/osac.html"):
     }
     return render(request, template,context)
 
-def grada_list(request,template="newsweb/osac.html"):
-	return render(request, template)
+def grada_list(request,template="newsweb/grada.html"):
+	data = grada.objects.all().values()
+	context = {
+		'data': data
+	}
+	return render(request, template, context)
 
 def cnn_list(request,template="newsweb/osac.html"):
 	return render(request, template)
@@ -98,13 +102,21 @@ def api_download(request):
 		excel_name = 'mondaq_'+id
 		filepath = downloadexcel.HandleData(data[0],excel_name)
 	elif article == 'osac':
-		data = osac.objects.filter(id=id)
+		data = osac.objects.filter(id=id).values()
+		excel_name = 'osac_' + id
+		filepath = downloadexcel.HandleData(data[0], excel_name)
 	elif article == 'grada':
-		data = grada.objects.filter(id=id)
+		data = grada.objects.filter(id=id).values()
+		excel_name = 'grada_' + id
+		filepath = downloadexcel.HandleData(data[0], excel_name)
 	elif article == 'cnn':
-		data = cnn.objects.filter(id=id)
+		data = cnn.objects.filter(id=id).values()
+		excel_name = 'cnn_' + id
+		filepath = downloadexcel.HandleData(data[0], excel_name)
 	elif article == 'anvilgroup':
-		data = anvilgroup.objects.filter(id=id)
+		data = anvilgroup.objects.filter(id=id).values()
+		excel_name = 'anvilgroup_' + id
+		filepath = downloadexcel.HandleData(data[0], excel_name)
 	
 	file = open(filepath, 'rb')
 	response = FileResponse(file)

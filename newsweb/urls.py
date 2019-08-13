@@ -8,7 +8,7 @@ from newsweb import views
 
 urlpatterns = [
 	# 首页
-	url(r'^$',views.mondaq),
+	url(r'^$',views.mondaq_list,name='index'),
 	
     # 文章列表展示页
 	url(r'mondaq_list',views.mondaq_list,name='mondaq_list'),
