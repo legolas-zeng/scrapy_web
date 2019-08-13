@@ -3,8 +3,41 @@ from newsweb.models import *
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from django.http import HttpResponse,HttpResponseRedirect,JsonResponse,request,Http404,FileResponse
 import json
-from scripts import downloadexcel
+from scripts import downloadexcel,handletranslate
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login, logout
+from django.core.urlresolvers import reverse
 # Create your views here.
+
+
+@csrf_exempt
+def Login(request,template='newsweb/login.html'):
+	msg = ''
+	next = request.GET.get('next', '')
+	if request.method == 'POST':
+		username = request.POST['user']
+		password = request.POST['passwd']
+		next = request.POST['next']
+		user = authenticate(username=username, password=password)
+		if user is not None:
+			if user.is_active:
+				login(request, user)
+				if next:
+					return HttpResponseRedirect(next)
+				return HttpResponseRedirect(reverse('index'))
+			else:
+				msg = u"用户已禁用"
+		else:
+			msg = u'用户名或者密码错误'
+	context = {
+		'msg': msg,
+		'next': next,
+	}
+	return render(request, template, context)
+@login_required
+def Logout(request):
+	logout(request)
+	return HttpResponseRedirect(reverse('login'))
 
 
 def mondaq_list(request,template="newsweb/mondaq.html"):
@@ -30,31 +63,6 @@ def cnn_list(request,template="newsweb/osac.html"):
 
 def anvilgroup_list(request,template="newsweb/osac.html"):
 	return render(request, template)
-
-
-def article_list(request,template="newsweb/article_list.html"):
-    article_name = request.GET['id']
-    print(article_name)
-    if article_name == 'mondaq':
-        data = mondaq.objects.all().values()
-        nav = 'mondaq'
-    elif article_name == 'osac':
-        data = osac.objects.all().values()
-        nav = 'osac'
-    elif article_name == 'grada':
-        data = grada.objects.all().values()
-        nav = 'grada'
-    elif article_name == 'cnn':
-        data = cnn.objects.all().values()
-        nav = 'cnn'
-    elif article_name == 'anvilgroup':
-        data = anvilgroup.objects.all().values()
-        nav = 'anvilgroup'
-    context = {
-        'data': data,
-        'nav': nav,
-    }
-    return render(request, template,context)
     
 
 def dispaly(request,template="newsweb/dispaly.html"):
@@ -105,13 +113,15 @@ def api_download(request):
 	response['Content-Disposition'] = 'attachment;filename="%s.xls"'%excel_name
 	return response
 
-# def download(request):
-# 	file = open('C:\\Users\Administrator\Desktop\\mondaq_2.xls', 'rb')
-# 	response = FileResponse(file)
-# 	response['Content-Type'] = 'application/octet-stream'
-# 	response['Content-Disposition'] = 'attachment;filename="mondaq_2.xls"'
-# 	return response
-
+def api_translate(request,tempalte='newsweb/translated.html'):
+	id = request.GET['id']
+	article = request.GET['article']
+	tran_title, tran_content = handletranslate.handledata(id, article)
+	context = {
+		'req': tran_title,
+		'content': tran_content,
+	}
+	return render(request, tempalte, context)
 def download_file(request):
     file = open('/home/logs/log.txt', 'rb')
     response = FileResponse(file)

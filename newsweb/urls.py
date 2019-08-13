@@ -7,7 +7,9 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from newsweb import views
 
 urlpatterns = [
+	# 首页
 	url(r'^$',views.mondaq),
+	
     # 文章列表展示页
 	url(r'mondaq_list',views.mondaq_list,name='mondaq_list'),
 	url(r'osac_list',views.osac_list,name='osac_list'),
@@ -21,7 +23,14 @@ urlpatterns = [
 	
 	# 功能类
 	url(r'api_download',views.api_download,name='api_download'),
+	url(r'api_translate',views.api_translate,name='api_translate'),
+	
 	# url(r'download',views.download,name='download'),
+	# 操作类接口
 	url(r'api_delete_article',views.api_delete_article,name='api_delete_article'),
+	
+	# 权限类
+	url(r'^login$',views.Login,name='login'),
+	url(r'^logout', views.Logout, name='logout'),
 
 ]

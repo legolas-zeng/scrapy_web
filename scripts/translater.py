@@ -61,20 +61,20 @@ def translate(content, types=''):
         return
     param = {'tk': tk, 'q': content}
     urlDic = {
-        'en_ch': "http://translate.google.cn/translate_a/single?client=t&sl=en&tl=zh-CN&hl=zh-CN&dt=at&dt=bd&dt=ex&dt=ld&dt=md&dt=qca&dt=rw&dt=rm&dt=ss&dt=t&ie=UTF-8&oe=UTF-8&clearbtn=1&otf=1&pc=1&srcrom=0&ssel=0&tsel=0&kc=2",
+        'en_ch': "http://translate.google.cn/translate_a/single?client=t&sl=auto&tl=zh-CN&hl=zh-CN&dt=at&dt=bd&dt=ex&dt=ld&dt=md&dt=qca&dt=rw&dt=rm&dt=ss&dt=t&ie=UTF-8&oe=UTF-8&clearbtn=1&otf=1&pc=1&srcrom=0&ssel=0&tsel=0&kc=2",
         'ch_en': "http://translate.google.cn/translate_a/single?client=t&sl=zh-CN&tl=en&hl=en&dt=at&dt=bd&dt=ex&dt=ld&dt=md&dt=qca&dt=rw&dt=rm&dt=ss&dt=t&ie=UTF-8&oe=UTF-8&clearbtn=1&otf=1&pc=1&srcrom=0&ssel=0&tsel=0&kc=2"}
-    if types:
-        try:
-            url = urlDic[types]
-        except KeyError:
-            print('Error: types can only be ch_en or en_ch')
-            sys.exit(0)
-    elif not re.search('^[\u4e00-\u9fa5]+$', content):  # 英译中
-        url = urlDic['en_ch']
-    elif not re.search('^[a-zA-Z]+$', content):  # 中译英
-        url = urlDic['ch_en']
-    else:
-        url = urlDic['en_ch']
+    # if types:
+    #     try:
+    #         url = urlDic[types]
+    #     except KeyError:
+    #         print('Error: types can only be ch_en or en_ch')
+    #         sys.exit(0)
+    # elif not re.search('^[\u4e00-\u9fa5]+$', content):  # 英译中
+    #     url = urlDic['en_ch']
+    # elif not re.search('^[a-zA-Z]+$', content):  # 中译英
+    #     url = urlDic['ch_en']
+    # else:
+    url = urlDic['en_ch']
     r = requests.get(url, params=param)
     result = ''
     for i in range(len(r.json()[0])):
@@ -83,6 +83,6 @@ def translate(content, types=''):
     return result
 
 
-if __name__ == "__main__":
-    content = "İşçinin Mevcut İşi Dişinda Ek Bir İş Yapmasinin Sadakat Yükümlülüğü Ve Rekabet Yasaği Açisindan Değerlendirilmesi"
-    print(translate(content))
+# if __name__ == "__main__":
+#     content = "Health Alert: Bolivia, Influenza H3N2, an Arenavirus Hemorrhagic Fever, and RSV"
+#     print(translate(content))

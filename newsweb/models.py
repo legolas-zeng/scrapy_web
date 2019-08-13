@@ -37,6 +37,16 @@ class osac(models.Model):
     class Meta:
         verbose_name = '文章信息'
         verbose_name_plural = '文章信息详情'
+        
+class grada(models.Model):
+	pass
+
+class cnn(models.Model):
+	pass
+
+class anvilgroup(models.Model):
+	pass
+
 	
 
 
