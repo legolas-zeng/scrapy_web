@@ -5,7 +5,8 @@
 from django.conf.urls import include, url
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from newsweb import views
-
+from search import views as sv
+from newsweb import action
 urlpatterns = [
 	# 首页
 	url(r'^$',views.mondaq_list,name='index'),
@@ -25,12 +26,19 @@ urlpatterns = [
 	url(r'api_download',views.api_download,name='api_download'),
 	url(r'api_translate',views.api_translate,name='api_translate'),
 	
-	# url(r'download',views.download,name='download'),
+	
 	# 操作类接口
 	url(r'api_delete_article',views.api_delete_article,name='api_delete_article'),
 	
 	# 权限类
 	url(r'^login$',views.Login,name='login'),
 	url(r'^logout', views.Logout, name='logout'),
+	
+	# 搜索类
+	url(r'^ip_search$', sv.ip_search, name='ip_search'),
+	url(r'^page_search', sv.page_search, name='page_search'),
+	url(r'searchpage',sv.searchpage,name='searchpage'),
+	# url(r'seek',sv.seek,name='seek'), # 查询接口
+	url(r'^action_search',include('search.urls')),
 
 ]

@@ -19,7 +19,7 @@
                 <ul class="nav metismenu" id="side-menu">
                     <li class="nav-header">
                         <div class="dropdown profile-element"> <span>
-                            <img alt="image" class="img-circle" src="/static/img/a6.jpg" />
+                            <img alt="image" class="img-circle" src="/static/img/profile_small.jpg" />
                              </span>
                             <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                             <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold">{{request.user.last_name}}{{ request.user.first_name }}</strong>
@@ -40,15 +40,10 @@
                             <li class="{% block nav_grada %}{% endblock %}"><a href="{% url 'grada_list' %}">grada</a></li>
                             <li class="{% block nav_cnn %}{% endblock %}"><a href="{% url 'cnn_list' %}">cnn</a></li>
                             <li class="{% block nav_anvilgroup %}{% endblock %}"><a href="{% url 'anvilgroup_list' %}">anvilgroup</a></li>
-{#                            <li class="{% block nav_mondaq %}{% endblock %}"><a href="{% url 'article_list' %}?id=mondaq">mondaq</a></li>#}
-{#                            <li class="{% block nav_osac %}{% endblock %}"><a href="{% url 'article_list' %}?id=osac">osac</a></li>#}
-{#                            <li class="{% block nav_grada %}{% endblock %}"><a href="{% url 'article_list' %}?id=grada">grada</a></li>#}
-{#                            <li class="{% block nav_cnn %}{% endblock %}"><a href="{% url 'article_list' %}?id=cnn">cnn</a></li>#}
-{#                            <li class="{% block nav_anvilgroup %}{% endblock %}"><a href="{% url 'article_list' %}?id=anvilgroup">anvilgroup</a></li>#}
                         </ul>
                     </li>
-                    <li>
-                        <a href="#"><i class="fa fa-diamond"></i> <span class="nav-label">搜索</span></a>
+                    <li class="{% block nav_search %}{% endblock %}">
+                        <a href="{% url 'searchpage' %}"><i class="fa fa-diamond"></i> <span class="nav-label">搜索</span></a>
                     </li>
                 </ul>
             </div>
@@ -59,9 +54,9 @@
         <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
         <div class="navbar-header">
             <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
-            <form role="search" class="navbar-form-custom" action="search_results.html">
+            <form role="search" class="navbar-form-custom" action="{% url 'ip_search' %}">
                 <div class="form-group">
-                    <input type="text" placeholder="Search for something..." class="form-control" name="top-search" id="top-search">
+                    <input type="text" placeholder="IP搜索..." class="form-control" name="top-search" id="top-search">
                 </div>
             </form>
         </div>

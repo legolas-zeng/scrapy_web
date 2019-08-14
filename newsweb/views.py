@@ -1,9 +1,10 @@
 from django.shortcuts import render
 from newsweb.models import *
-from django.views.decorators.csrf import csrf_protect, csrf_exempt
-from django.http import HttpResponse,HttpResponseRedirect,JsonResponse,request,Http404,FileResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponse,HttpResponseRedirect, FileResponse
 import json
 from scripts import downloadexcel,handletranslate
+from newsweb import action
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.core.urlresolvers import reverse
@@ -148,6 +149,10 @@ def download_file(request):
     response['Content-Disposition'] = 'attachment;filename="log.txt"'
     return response
 
-def api_delete_article():
-	pass
-
+	
+@csrf_exempt
+def api_delete_article(request):
+	if request.method == 'POST':
+		req = json.loads(request.body)
+		print(req)
+	return HttpResponse({'status': 1})
