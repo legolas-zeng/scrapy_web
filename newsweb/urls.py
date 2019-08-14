@@ -27,9 +27,6 @@ urlpatterns = [
 	url(r'api_translate',views.api_translate,name='api_translate'),
 	url(r'test',views.test,name='test'),
 	
-	
-	
-	
 	# 操作类接口
 	url(r'api_delete_article',views.api_delete_article,name='api_delete_article'),
 	
@@ -43,5 +40,8 @@ urlpatterns = [
 	url(r'searchpage',sv.searchpage,name='searchpage'),
 	# url(r'seek',sv.seek,name='seek'), # 查询接口
 	url(r'^action_search',include('search.urls')),
+	
+	# 用户权限类
+	url(r'^ip_search', sv.ip_search, name='ip_search'),
 
 ]
