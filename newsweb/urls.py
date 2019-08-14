@@ -24,6 +24,7 @@ urlpatterns = [
 	
 	# 功能类
 	url(r'api_download',views.api_download,name='api_download'),
+	url(r'api_mult_download',views.api_mult_download,name='api_mult_download'),
 	url(r'api_translate',views.api_translate,name='api_translate'),
 	url(r'test',views.test,name='test'),
 	
@@ -41,7 +42,7 @@ urlpatterns = [
 	# url(r'seek',sv.seek,name='seek'), # 查询接口
 	url(r'^action_search',include('search.urls')),
 	
-	# 用户权限类
+	# 用户类
 	url(r'^ip_search', sv.ip_search, name='ip_search'),
 
 ]

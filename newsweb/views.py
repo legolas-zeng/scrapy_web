@@ -132,6 +132,19 @@ def api_download(request):
 	response['Content-Type'] = 'application/octet-stream'
 	response['Content-Disposition'] = 'attachment;filename="%s.xls"'%excel_name
 	return response
+	
+@csrf_exempt
+def api_mult_download(request):
+	if request.method == 'POST':
+		req = json.loads(request.body)
+		idlist = req.get('data')
+		article = req.get('article')
+		print('11111',idlist,article)
+		downloadexcel.MultHandleData(idlist,article)
+		context = {
+			'req': 1111,
+		}
+		return HttpResponse(context)
 
 def api_translate(request,tempalte='newsweb/translated.html'):
 	id = request.GET['id']
@@ -142,6 +155,7 @@ def api_translate(request,tempalte='newsweb/translated.html'):
 		'content': tran_content,
 	}
 	return render(request, tempalte, context)
+
 def download_file(request):
     file = open('/home/logs/log.txt', 'rb')
     response = FileResponse(file)
