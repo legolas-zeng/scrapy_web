@@ -19,11 +19,16 @@ def page_search(request):
 	if request.method=='GET':
 		title = request.GET['title']
 		source = request.GET['source']
+		start = request.GET['start']
+		end = request.GET['end']
+		
 		key_word = {
 			'title':title,
 			'source':source,
+			'start':start,
+			'end':end,
 		}
-		
+		print('+++++',key_word)
 		return HttpResponseRedirect(reverse(action.action_search, args=[key_word]))
 	
 	

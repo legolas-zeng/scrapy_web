@@ -25,6 +25,9 @@ urlpatterns = [
 	# 功能类
 	url(r'api_download',views.api_download,name='api_download'),
 	url(r'api_translate',views.api_translate,name='api_translate'),
+	url(r'test',views.test,name='test'),
+	
+	
 	
 	
 	# 操作类接口

@@ -156,3 +156,8 @@ def api_delete_article(request):
 		req = json.loads(request.body)
 		print(req)
 	return HttpResponse({'status': 1})
+
+
+def test(request,template="search/test.html"):
+	return render(request, template)
+	
