@@ -3,20 +3,31 @@ import django.utils.timezone as timezone
 # Create your models here.
 
 class mondaq(models.Model):
-	url = models.CharField(max_length=255, verbose_name="网址")
-	url_object_id = models.CharField(max_length=255,verbose_name="网址id")
-	title = models.CharField(max_length=255,verbose_name="文章标题")
-	# create_date = models.DateTimeField(verbose_name="时间")
-	create_date = models.CharField(max_length=255,verbose_name="文章创建时间")
-	country = models.CharField(max_length=255,verbose_name="地区")
-	authors = models.CharField(max_length=255,verbose_name="文章作者")
-	organization = models.CharField(max_length=255,verbose_name="文章所属机构或组织")
-	tags = models.CharField(max_length=255,verbose_name="标签")
-	content = models.TextField(verbose_name="文章内容")
+	url = models.CharField(max_length=255, verbose_name="网址",blank=False,null=False)
+	url_object_id = models.CharField(max_length=255,verbose_name="网址id",blank=True,null=True)
+	title = models.CharField(max_length=255,verbose_name="文章标题",blank=True,null=True)
+	create_date = models.CharField(max_length=255,verbose_name="文章创建时间",blank=True,null=True)
+	tags = models.CharField(max_length=255, verbose_name="标签")
+	content = models.TextField(verbose_name="文章内容1")
+	content_text = models.TextField(verbose_name="文章内容2")
+	authors = models.CharField(max_length=255, verbose_name="文章作者")
+	organization = models.CharField(max_length=255, verbose_name="文章所属机构或组织")
+	abstract = models.CharField(max_length=500, verbose_name="文章摘要")
+	article_type = models.IntegerField(verbose_name="文章的类型")
+	location_country = models.CharField(max_length=50,verbose_name="文章涉及的国家")
+	location_city = models.CharField(max_length=50,verbose_name="文章涉及的城市")
+	location_detail = models.CharField(max_length=50,verbose_name="文章涉及的详细地址")
+	event = models.TextField(verbose_name="事件")
+	event_level = models.IntegerField(verbose_name="事件的等级")
+	event_happen_time = models.CharField(max_length=50,verbose_name="事件的开始时间")
+	event_warning_interval_time = models.CharField(max_length=100,verbose_name="事件的预警时间")
+	event_analyze = models.TextField(verbose_name="对事件的分析")
+	event_advice = models.TextField(verbose_name="对事件的建议")
+	event_relevant_early_warning = models.TextField(verbose_name="事件的最近相关的预警")
 	
 	class Meta:
-		verbose_name = '文章信息'
-		verbose_name_plural = '文章信息详情'
+		verbose_name = 'mondaq文章信息'
+		verbose_name_plural = 'mondaq文章信息详情'
 	
 class osac(models.Model):
     url = models.CharField(max_length=255, verbose_name="网址")

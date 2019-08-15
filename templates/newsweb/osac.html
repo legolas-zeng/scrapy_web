@@ -48,6 +48,16 @@
                         </tr>
                         </tfoot>
                     </table>
+                    <div class="col-sm-12">
+                        <hr style="height:1px;border:none;border-top:1px dashed #cc0900;" />
+                    </div>
+                    <div class="col-sm-10">
+                    </div>
+                    <div class="col-sm-2">
+                        <p>
+                            <button id="daochu" name="批量导出" type="button" class="btn btn-block btn-outline btn-success">批量导出</button>
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -102,46 +112,26 @@
     </script>
     <script>
         $(function (){
-            $("#shanchu").click(function(){
+            $("#daochu").click(function(){
                 var idlist = [];
                 $("input[name='radio2']").each(function () {
                     if ($(this).is(":checked") == true) {
                         var id = $(this).val()
-                        data_json={'id':id,}
-                        console.log(data_json)
-                        idlist.push(data_json)
+                        idlist.push(id)
                     }
                 })
                 console.log(idlist)
-                if (idlist.length == 0){
-                    toastr.error('请选择要删除的文章！！！！')
-                }
-                else {
-                    Ewin.confirm({message: "老铁，你确定要删除吗！！！"}).on(function (e) {
-                        if (!e) {
-                            return;
-                        }
-                        var html = $.ajax({
-                            type: "POST",
-                            url: "{% url 'api_delete_article' %}",
-                            data: JSON.stringify({
-                                'id': idlist,
-                            }),
-                            dataType: 'JSON',
-                            success: function (data) {
-                                if (data.status == '1') {
-                                    toastr.success(data.msg)
-                                    setTimeout(function () {
-                                        window.location.reload()
-                                    }, 1000);
-                                } else {
-                                    toastr.error(data.msg)
-                                }
-
-                            }
-                        })
-                    })
-                }
+                $.ajax({
+                     type:"POST",
+                     url:"{% url 'api_mult_download' %}",
+                     data:JSON.stringify({'data':idlist,'article':'osac'}),
+                     datatype:'json',
+                     success: function(data){
+                     	 console.log(data)
+                         console.log(data.filename,data.filepath)
+                         location.href = '{% url 'download_file' %}?filepath='+data.filepath+'&filename='+data.filename
+                     }
+                })
              });
         });
     </script>

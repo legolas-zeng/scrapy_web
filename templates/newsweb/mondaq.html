@@ -51,11 +51,16 @@
                         <div class="col-sm-12">
                             <hr style="height:1px;border:none;border-top:1px dashed #cc0900;" />
                         </div>
-                        <div class="col-sm-10">
+                        <div class="col-sm-8">
                         </div>
                         <div class="col-sm-2">
                             <p>
-                                <button id="daochu" name="批量导出" type="button" class="btn btn-block btn-outline btn-success">批量导出</button>
+                                <button id="daochu" name="批量导出" type="button" class="btn btn-block btn-outline btn-success">原文批量导出</button>
+                            </p>
+                        </div>
+                        <div class="col-sm-2">
+                            <p>
+                                <button id="daochu" name="批量导出" type="button" class="btn btn-block btn-outline btn-danger">翻译批量导出</button>
                             </p>
                         </div>
                     </div>
@@ -131,7 +136,9 @@
                      data:JSON.stringify({'data':idlist,'article':'mondaq'}),
                      datatype:'json',
                      success: function(data){
-                     	console.log(data)
+                     	 console.log(data)
+                         console.log(data.filename,data.filepath)
+                         location.href = '{% url 'download_file' %}?filepath='+data.filepath+'&filename='+data.filename
                      }
                 })
              });

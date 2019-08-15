@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from newsweb.models import *
 from django.views.decorators.csrf import csrf_exempt
-from django.http import HttpResponse,HttpResponseRedirect, FileResponse
+from django.http import HttpResponse,HttpResponseRedirect, FileResponse,JsonResponse,request,Http404
 import json
 from scripts import downloadexcel,handletranslate
 from newsweb import action
@@ -139,12 +139,17 @@ def api_mult_download(request):
 		req = json.loads(request.body)
 		idlist = req.get('data')
 		article = req.get('article')
-		print('11111',idlist,article)
-		downloadexcel.MultHandleData(idlist,article)
+		filepath,filename = downloadexcel.MultHandleData(idlist,article)
+		print(filepath,filename)
 		context = {
-			'req': 1111,
+			'filepath':filepath,
+			'filename':filename
 		}
-		return HttpResponse(context)
+	
+		return JsonResponse(context)
+	
+
+		
 
 def api_translate(request,tempalte='newsweb/translated.html'):
 	id = request.GET['id']
@@ -157,11 +162,14 @@ def api_translate(request,tempalte='newsweb/translated.html'):
 	return render(request, tempalte, context)
 
 def download_file(request):
-    file = open('/home/logs/log.txt', 'rb')
-    response = FileResponse(file)
-    response['Content-Type'] = 'application/octet-stream'
-    response['Content-Disposition'] = 'attachment;filename="log.txt"'
-    return response
+	filepath = request.GET['filepath']
+	filename = request.GET['filename']
+	print(filepath,filename)
+	file = open(filepath, 'rb')
+	response = FileResponse(file)
+	response['Content-Type'] = 'application/octet-stream'
+	response['Content-Disposition'] = 'attachment;filename="%s.xls"'%filename
+	return response
 
 	
 @csrf_exempt

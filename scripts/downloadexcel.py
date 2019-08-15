@@ -23,35 +23,54 @@ def HandleData(data,article):
 	return filepath
 
 def MultHandleData(idlist,article):
-	row = 1
-	
+	data_list = []
 	for id in idlist:
-		print(id)
 		if article == 'mondaq':
 			data = mondaq.objects.filter(id=id).values()
+			data_list.append(data)
 		elif article == 'osac':
 			data = osac.objects.filter(id=id).values()
+			data_list.append(data)
 		elif article == 'grada':
 			data = grada.objects.filter(id=id).values()
+			data_list.append(data)
 		elif article == 'cnn':
 			data = cnn.objects.filter(id=id).values()
+			data_list.append(data)
 		elif article == 'anvilgroup':
 			data = anvilgroup.objects.filter(id=id).values()
-		
-		workbook = xlwt.Workbook(encoding='utf-8')
-		worksheet = workbook.add_sheet('data', cell_overwrite_ok=True)
+			data_list.append(data)
+	filepath,filename = create_xls(data_list,article)
+	
+	return filepath,filename
+
+
+def create_xls(data_list,article):
+	print('文章类型',article)
+	workbook = xlwt.Workbook(encoding='utf-8')
+	worksheet = workbook.add_sheet('data', cell_overwrite_ok=True)
+	
+	row = 1
+	header = []
+	for data in data_list:
 		j = 0
-		header = []
-		for k in data[0]:
-			header.append(k)
-			worksheet.write(row, j, data[0].get(k))
+		for v in data[0]:
+			# print('写入....',row, j,v)
+			worksheet.write(0,j,v)
+			worksheet.write(row, j, data[0].get(v))
 			j += 1
-		print('第几行',row)
 		row +=1
-		i = 0
-		print('333', header)
-		for each_header in header:
-			worksheet.write(0, i, each_header)  # 写入表头
-			i += 1
-	filepath = 'C:\\Users\Administrator\Desktop\\%s.xls' % article
+	filepath = 'C:\\Users\Administrator\Desktop\\%s_%s.xls' %(article,len(data_list))
+	filename = article + '_' + str(len(data_list))
 	workbook.save(filepath)
+	return filepath,filename
+	
+	# print('第几行',row)
+	# row +=1
+	# i = 0
+	# print('333', header)
+	# for each_header in header:
+	# 	worksheet.write(0, i, each_header)  # 写入表头
+	# 	i += 1
+	# filepath = 'C:\\Users\Administrator\Desktop\\%s.xls' % article
+	# workbook.save(filepath)
