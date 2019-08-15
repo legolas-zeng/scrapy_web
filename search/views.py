@@ -28,7 +28,7 @@ def page_search(request):
 			'start':start,
 			'end':end,
 		}
-		print('+++++',key_word)
+		# print('+++++',key_word)
 		return HttpResponseRedirect(reverse(action.action_search, args=[key_word]))
 	
 	

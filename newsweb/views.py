@@ -3,7 +3,8 @@ from newsweb.models import *
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse,HttpResponseRedirect, FileResponse,JsonResponse,request,Http404
 import json
-from scripts import downloadexcel,handletranslate
+from scripts import downloadexcel,handletranslate,functions
+from scripts.mysql_connect import Rrjc_DB
 from newsweb import action
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
@@ -41,7 +42,7 @@ def Logout(request):
 
 
 def mondaq_list(request,template="newsweb/mondaq.html"):
-	data = mondaq.objects.all().values()
+	data = functions.Query('mondaq')
 	context = {
 		'data': data
 	}
@@ -49,28 +50,29 @@ def mondaq_list(request,template="newsweb/mondaq.html"):
 
 
 def osac_list(request,template="newsweb/osac.html"):
-    data = osac.objects.all().values()
+    # data = osac.objects.all().values()
+    data = functions.Query('osac')
     context = {
         'data': data
     }
     return render(request, template,context)
 
 def grada_list(request,template="newsweb/grada.html"):
-	data = grada.objects.all().values()
+	data = functions.Query('grada')
 	context = {
 		'data': data
 	}
 	return render(request, template, context)
 
 def cnn_list(request,template="newsweb/cnn.html"):
-	data = cnn.objects.all().values()
+	data = functions.Query('cnn')
 	context = {
 		'data': data
 	}
 	return render(request, template, context)
 
 def anvilgroup_list(request,template="newsweb/anvilgroup.html"):
-	data = anvilgroup.objects.all().values()
+	data = functions.Query('anvilgroup')
 	context = {
 		'data': data
 	}
@@ -82,50 +84,56 @@ def dispaly(request,template="newsweb/dispaly.html"):
 	article = request.GET['article']
 	print(id,article)
 	if article == 'mondaq':
-		data = mondaq.objects.filter(id=id)
+		# data = mondaq.objects.filter(id=id)
+		data, authors, tags = functions.QueryArticle('mondaq',id)
 		nav = "mondaq"
 	elif article == 'osac':
-		data = osac.objects.filter(id=id)
+		data, authors, tags = functions.QueryArticle('osac', id)
 		nav = "osac"
 	elif article == 'grada':
-		data = grada.objects.filter(id=id)
+		data, authors, tags = functions.QueryArticle('grada', id)
 		nav = "grada"
 	elif article == 'cnn':
-		data = cnn.objects.filter(id=id)
+		data, authors, tags = functions.QueryArticle('cnn', id)
 		nav = "cnn"
 	elif article == 'anvilgroup':
-		data = anvilgroup.objects.filter(id=id)
+		data, authors, tags = functions.QueryArticle('anvilgroup', id)
 		nav = "anvilgroup"
 	# data = mondaq.objects.filter(id=id)
 	context = {'data': data,
-	           'nav':nav}
+	           'nav':nav,
+	           'authors':authors,
+	           'tags':tags,}
 	return render(request, template, context)
 
 @csrf_exempt
 def api_download(request):
 	id = request.GET['id']
 	article = request.GET['article']
-	print(id, article)
-	if article == 'mondaq':
-		data = mondaq.objects.filter(id=id).values()
-		excel_name = 'mondaq_'+id
-		filepath = downloadexcel.HandleData(data[0],excel_name)
-	elif article == 'osac':
-		data = osac.objects.filter(id=id).values()
-		excel_name = 'osac_' + id
-		filepath = downloadexcel.HandleData(data[0], excel_name)
-	elif article == 'grada':
-		data = grada.objects.filter(id=id).values()
-		excel_name = 'grada_' + id
-		filepath = downloadexcel.HandleData(data[0], excel_name)
-	elif article == 'cnn':
-		data = cnn.objects.filter(id=id).values()
-		excel_name = 'cnn_' + id
-		filepath = downloadexcel.HandleData(data[0], excel_name)
-	elif article == 'anvilgroup':
-		data = anvilgroup.objects.filter(id=id).values()
-		excel_name = 'anvilgroup_' + id
-		filepath = downloadexcel.HandleData(data[0], excel_name)
+	# print(id, article)
+	data = functions.QueryTranslation(article, id)
+	excel_name = article + '_'+ id
+	filepath = downloadexcel.HandleData(data[0], excel_name)
+	# if article == 'mondaq':
+	# 	data = mondaq.objects.filter(id=id).values()
+	# 	excel_name = 'mondaq_'+id
+	# 	filepath = downloadexcel.HandleData(data[0],excel_name)
+	# elif article == 'osac':
+	# 	data = osac.objects.filter(id=id).values()
+	# 	excel_name = 'osac_' + id
+	# 	filepath = downloadexcel.HandleData(data[0], excel_name)
+	# elif article == 'grada':
+	# 	data = grada.objects.filter(id=id).values()
+	# 	excel_name = 'grada_' + id
+	# 	filepath = downloadexcel.HandleData(data[0], excel_name)
+	# elif article == 'cnn':
+	# 	data = cnn.objects.filter(id=id).values()
+	# 	excel_name = 'cnn_' + id
+	# 	filepath = downloadexcel.HandleData(data[0], excel_name)
+	# elif article == 'anvilgroup':
+	# 	data = anvilgroup.objects.filter(id=id).values()
+	# 	excel_name = 'anvilgroup_' + id
+	# 	filepath = downloadexcel.HandleData(data[0], excel_name)
 	
 	file = open(filepath, 'rb')
 	response = FileResponse(file)
@@ -147,8 +155,6 @@ def api_mult_download(request):
 		}
 	
 		return JsonResponse(context)
-	
-
 		
 
 def api_translate(request,tempalte='newsweb/translated.html'):

@@ -4,6 +4,7 @@
 
 import xlwt,xlrd
 from newsweb.models import *
+from scripts import functions
 	
 def HandleData(data,article):
 	header = []
@@ -25,21 +26,23 @@ def HandleData(data,article):
 def MultHandleData(idlist,article):
 	data_list = []
 	for id in idlist:
-		if article == 'mondaq':
-			data = mondaq.objects.filter(id=id).values()
-			data_list.append(data)
-		elif article == 'osac':
-			data = osac.objects.filter(id=id).values()
-			data_list.append(data)
-		elif article == 'grada':
-			data = grada.objects.filter(id=id).values()
-			data_list.append(data)
-		elif article == 'cnn':
-			data = cnn.objects.filter(id=id).values()
-			data_list.append(data)
-		elif article == 'anvilgroup':
-			data = anvilgroup.objects.filter(id=id).values()
-			data_list.append(data)
+		data = functions.QueryTranslation(article, id)
+		data_list.append(data)
+		# if article == 'mondaq':
+		# 	data = mondaq.objects.filter(id=id).values()
+		# 	data_list.append(data)
+		# elif article == 'osac':
+		# 	data = osac.objects.filter(id=id).values()
+		# 	data_list.append(data)
+		# elif article == 'grada':
+		# 	data = grada.objects.filter(id=id).values()
+		# 	data_list.append(data)
+		# elif article == 'cnn':
+		# 	data = cnn.objects.filter(id=id).values()
+		# 	data_list.append(data)
+		# elif article == 'anvilgroup':
+		# 	data = anvilgroup.objects.filter(id=id).values()
+		# 	data_list.append(data)
 	filepath,filename = create_xls(data_list,article)
 	
 	return filepath,filename

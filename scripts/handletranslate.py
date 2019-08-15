@@ -2,27 +2,21 @@
 # @Time    : 2019/8/13 13:56
 # @Author  : zwa
 from newsweb.models import *
-from scripts import translater,translater2
+from scripts import translater,translater2,functions
 # from GoogleFreeTrans import Translator
 import re
 
 
 def handledata(id,article:str):
-	if article == 'mondaq':
-		data = mondaq.objects.filter(id=id).values()
-		tran_title, tran_content = Translated(data[0])
-	elif article == 'osac':
-		data = osac.objects.filter(id=id).values()
-		tran_title,tran_content = Translated(data[0])
-	elif article == 'grada':
-		data = grada.objects.filter(id=id).values()
-		tran_title, tran_content = Translated(data[0])
-	elif article == 'cnn':
-		data = cnn.objects.filter(id=id).values()
-		tran_title, tran_content = Translated(data[0])
-	elif article == 'anvilgroup':
-		data = anvilgroup.objects.filter(id=id).values()
-		tran_title, tran_content = Translated(data[0])
+	data = functions.QueryTranslation(article, id)
+	tran_title, tran_content = Translated(data[0])
+	# if article == 'mondaq':
+	# 	# data = mondaq.objects.filter(id=id).values()
+	# 	data = functions.QueryTranslation(article,id)
+	# 	tran_title, tran_content = Translated(data[0])
+	# elif article == 'osac':
+	# 	data = functions.QueryTranslation(article, id)
+	# 	tran_title,tran_content = Translated(data[0])
 	return tran_title,tran_content
 
 		
