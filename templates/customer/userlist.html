@@ -21,7 +21,7 @@
                             <th style="width:10px;text-align:center;">管理员</th>
                             <th style="width:10px;text-align:center;">是否激活</th>
                             <th style="width:10px;text-align:center;">超级用户</th>
-                            <th style="width:20px;text-align:center;"><input type="checkbox" name="select_all">全选</th>
+                            <th style="width:20px;text-align:center;">单选</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -33,7 +33,15 @@
                             <td align="center">{% if info.is_active %}<p><span class="badge badge-warning">已激活</span></p>{% else %}<p><span class="badge">未激活</span></p>{% endif %}</td>
                             <td align="center">{{ info.is_superuser }}</td>
                             <td align="center">
-                                <input type="checkbox"  name="radio2" value="111" data-number="#">
+                                {% if request.user.is_superuser %}
+                                    <input type="checkbox"  name="ip_list" value="{{ info.id }}" data-number="#">
+                                {% else %}
+                                    {% if info.is_superuser or info.is_staff%}
+                                        <input type="checkbox" data-number="#" disabled='disabled'>
+                                    {% else %}
+                                        <input type="checkbox"  name="ip_list" value="{{ info.id }}" data-number="#">
+                                    {% endif %}
+                                {% endif %}
                             </td>
                         </tr>
                         {% endfor %}
@@ -42,10 +50,10 @@
                         <tr>
                             <th style="width:10px;text-align:center;">ID</th>
                             <th style="width:20px;text-align:center;">用户名</th>
-                            <th style="width:10px;text-align:center;">职员账号</th>
-                            <th style="width:10px;text-align:center;">账号状态</th>
+                            <th style="width:10px;text-align:center;">管理员</th>
+                            <th style="width:10px;text-align:center;">是否激活</th>
                             <th style="width:10px;text-align:center;">超级用户</th>
-                            <th style="width:20px;text-align:center;"><input type="checkbox" name="select_all">全选</th>
+                            <th style="width:20px;text-align:center;">单选</th>
                         </tr>
                         </tfoot>
                     </table>
@@ -56,17 +64,17 @@
                     </div>
                     <div class="col-sm-2">
                         <p>
-                            <button id="daochu" name="添加用户" type="button" class="btn btn-block btn-outline btn-success">添加用户</button>
+                            <button id="adduser" name="添加用户" type="button" class="btn btn-block btn-outline btn-success">添加用户</button>
                         </p>
                     </div>
                     <div class="col-sm-2">
                         <p>
-                            <button id="daochu" name="锁定用户" type="button" class="btn btn-block btn-outline btn-warning">锁定用户</button>
+                            <button id="lockuser" name="锁定用户" type="button" class="btn btn-block btn-outline btn-warning">锁定用户</button>
                         </p>
                     </div>
                     <div class="col-sm-2">
                         <p>
-                            <button id="daochu" name="删除用户" type="button" class="btn btn-block btn-outline btn-danger">删除用户</button>
+                            <button id="deluser" name="删除用户" type="button" class="btn btn-block btn-outline btn-danger">删除用户</button>
                         </p>
                     </div>
                 </div>
@@ -112,13 +120,39 @@
         });
 
     </script>
+
     <script>
-        $("input[name='select_all']").change(function(){
-        if ($(this).is(":checked") == true) {
-            $("input[name='radio2']").prop("checked",true);
-        }else{
-            $("input[name='radio2']").prop("checked",false);
-        }
-    })
+        $(function (){
+            $("#lockuser").click(function(){
+                var Postdata = {
+                    'id_list':[],
+                    'cmd':'',
+                    'argv1':''
+                }
+                $("input[name='ip_list']").each(function(){
+                    if ($(this).is(":checked") == true) {
+                        Postdata["id_list"].push($(this).val());
+                    }
+                })
+                console.log(Postdata)
+                $.ajax({
+                    method: 'post',
+                    dataType:'json',
+                    data:JSON.stringify(Postdata),
+                    url: "{% url 'api_lock_user' %}",
+                    success: function(data){
+                        console.log(data.msg)
+                        console.log(data.status)
+                        if (data.status == '1'){
+                            toastr.success(data.msg)
+                        }
+                        else {
+                            toastr.error(data.msg)
+                        }
+                    }
+                })
+            })
+        })
     </script>
+
 {% endblock %}

@@ -46,5 +46,6 @@ urlpatterns = [
 	
 	# 用户类
 	url(r'^user_list', cv.user_list, name='user_list'),
+	url(r'^api_lock_user', cv.api_lock_user, name='api_lock_user'),
 
 ]

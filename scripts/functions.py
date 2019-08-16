@@ -58,9 +58,21 @@ def QuerySearchNoTitle(article,startdate,enddate):
 	querys.close()
 	return data
 
+# 查询所有用户
 def QueryUserList():
 	querys = Rrjc_DB()
 	sql = "select * from customer"
 	data = querys.query(sql)
 	querys.close()
 	return data
+
+def QueryVipType(name):
+	querys = Rrjc_DB()
+	sql = "select is_vip_type from customer where is_username='%s'"%name
+	print(sql)
+	data = querys.query(sql)
+	querys.close()
+	return data
+
+def UpdataUser(id):
+	pass

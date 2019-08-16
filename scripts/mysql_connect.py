@@ -12,11 +12,11 @@ CENTERDB_INFO = {
 
 class Rrjc_DB(object):
 	def __init__(self):
-		self.host = '192.168.3.5'
+		self.host = '127.0.0.1'
 		self.port = '3306'
 		self.passwd = 'qq1005521'
-		self.user = 'zwa'
-		self.db = 'article_source'
+		self.user = 'root'
+		self.db = 'imei'
 		self.cursor = self.conn()
 	
 	def conn(self):

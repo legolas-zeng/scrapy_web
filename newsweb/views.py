@@ -27,9 +27,9 @@ def Login(request,template='newsweb/login.html'):
 					return HttpResponseRedirect(next)
 				return HttpResponseRedirect(reverse('index'))
 			else:
-				msg = u"用户已禁用"
+				msg = "用户已禁用"
 		else:
-			msg = u'用户名或者密码错误'
+			msg = '用户名或者密码错误'
 	context = {
 		'msg': msg,
 		'next': next,
@@ -43,8 +43,12 @@ def Logout(request):
 
 def mondaq_list(request,template="newsweb/mondaq.html"):
 	data = functions.Query('mondaq')
+	username = request.user
+	is_vip_type = functions.QueryVipType(username)
+	print(is_vip_type)
 	context = {
-		'data': data
+		'data': data,
+		'is_vip_type':is_vip_type[0].get('is_vip_type'),
 	}
 	return render(request, template,context)
 
