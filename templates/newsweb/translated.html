@@ -13,13 +13,13 @@
             <div class="ibox">
                 <div class="ibox-content">
                     <div class="pull-right">
-                        <button class="btn btn-white btn-xs" type="button">作者</button>
+                        <button class="btn btn-white btn-xs" type="button">作者：{% if authors == ''  %}无名氏{% else %}{{ authors }}{% endif %}</button>
                     </div>
                     <div class="pull-left">
                         <span class="label label-primary">已翻译</span>
                     </div>
                     <div class="text-center article-title">
-                    <span class="text-muted"><i class="fa fa-clock-o"></i>时间</span>
+                    <span class="text-muted"><i class="fa fa-clock-o"></i>时间:{{ article_time }}</span>
                         <h1>
                             {{ req }}
                         </h1>
@@ -30,10 +30,8 @@
                     <hr>
                     <div class="row">
                         <div class="col-md-6">
-                                <h5>Tags:</h5>
-
-                                <button class="btn btn-primary btn-xs" type="button">标签</button>
-
+                            <h5>标签:</h5>
+                            <button class="btn btn-primary btn-xs" type="button">{% if tags == ''  %}暂无标签{% else %}{{ tags }}{% endif %}</button>
                         </div>
                     </div>
                 </div>

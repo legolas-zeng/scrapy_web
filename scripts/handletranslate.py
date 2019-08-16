@@ -11,13 +11,18 @@ def handledata(id,article:str):
 	data = functions.QueryTranslation(article, id)
 	tran_title, tran_content = Translated(data[0])
 	# if article == 'mondaq':
-	# 	# data = mondaq.objects.filter(id=id).values()
-	# 	data = functions.QueryTranslation(article,id)
+	# 	data = mondaq.objects.filter(id=id).values()
 	# 	tran_title, tran_content = Translated(data[0])
-	# elif article == 'osac':
-	# 	data = functions.QueryTranslation(article, id)
-	# 	tran_title,tran_content = Translated(data[0])
-	return tran_title,tran_content
+	if data[0].get('authors') == None:
+		authors = ''
+	else:
+		authors = data[0].get('authors').split('"')[1]
+	if data[0].get('tags') == None:
+		tags = ''
+	else:
+		tags = data[0].get('tags').split('"')[1]
+	article_time = data[0].get('create_date')
+	return tran_title,tran_content,authors, tags,article_time
 
 		
 def Translated(data):

@@ -6,6 +6,7 @@ from django.conf.urls import include, url
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from newsweb import views
 from search import views as sv
+from customer import views as cv
 from newsweb import action
 urlpatterns = [
 	# 首页
@@ -44,6 +45,6 @@ urlpatterns = [
 	url(r'^action_search',include('search.urls')),
 	
 	# 用户类
-	url(r'^ip_search', sv.ip_search, name='ip_search'),
+	url(r'^user_list', cv.user_list, name='user_list'),
 
 ]

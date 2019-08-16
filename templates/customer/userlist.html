@@ -1,7 +1,7 @@
 {% extends "index.html" %}
 {% load static %}
-{% block nav_article %}active{% endblock %}
-{% block nav_osac %}active{% endblock %}
+{% block nav_customer %}active{% endblock %}
+{% block nav_user %}active{% endblock %}
 {% block head %}
 <title>爬虫数据展示</title>
 <link href="/static/css/plugins/dataTables/datatables.min.css" rel="stylesheet">
@@ -17,56 +17,62 @@
                         <thead>
                         <tr>
                             <th style="width:10px;text-align:center;">ID</th>
-                            <th style="width:160px;text-align:center;">文章标题</th>
-                            <th style="width:60px;text-align:center;">日期</th>
+                            <th style="width:20px;text-align:center;">用户名</th>
+                            <th style="width:10px;text-align:center;">管理员</th>
+                            <th style="width:10px;text-align:center;">是否激活</th>
+                            <th style="width:10px;text-align:center;">超级用户</th>
                             <th style="width:20px;text-align:center;"><input type="checkbox" name="select_all">全选</th>
-{#                            <th style="width:10px;text-align:center;">编辑信息</th>#}
                         </tr>
                         </thead>
                         <tbody>
                         {% for info in data %}
                         <tr>
                             <td align="center">{{ info.id }}</td>
-                            <td align="center"><a href ="{% url "display" %}?id={{ info.id }}&article=osac">{{ info.title }}</a></td>
-                            <td align="center">{{ info.create_date }}</td>
+                            <td align="center">{{ info.is_username }}</td>
+                            <td align="center">{% if info.is_staff %}<p><span class="badge badge-primary">管理员</span></p>{% else %}<p><span class="badge">普通用户</span></p>{% endif %}</td>
+                            <td align="center">{% if info.is_active %}<p><span class="badge badge-warning">已激活</span></p>{% else %}<p><span class="badge">未激活</span></p>{% endif %}</td>
+                            <td align="center">{{ info.is_superuser }}</td>
                             <td align="center">
-                                <input type="checkbox"  name="radio2" value="{{ info.id }}" data-number="#">
+                                <input type="checkbox"  name="radio2" value="111" data-number="#">
                             </td>
-{#                            <td align="center">#}
-{#                                <button id="bianji" type="button" class="btn btn-default"><a href ="#">编辑信息</a></button>#}
-{#                            </td>#}
                         </tr>
                         {% endfor %}
-                    </tbody>
+                        </tbody>
                         <tfoot>
                         <tr>
                             <th style="width:10px;text-align:center;">ID</th>
-                            <th style="width:160px;text-align:center;">文章内容</th>
-                            <th style="width:60px;text-align:center;">日期</th>
+                            <th style="width:20px;text-align:center;">用户名</th>
+                            <th style="width:10px;text-align:center;">职员账号</th>
+                            <th style="width:10px;text-align:center;">账号状态</th>
+                            <th style="width:10px;text-align:center;">超级用户</th>
                             <th style="width:20px;text-align:center;"><input type="checkbox" name="select_all">全选</th>
-{#                            <th style="width:10px;text-align:center;">编辑信息</th>#}
                         </tr>
                         </tfoot>
                     </table>
                     <div class="col-sm-12">
                         <hr style="height:1px;border:none;border-top:1px dashed #cc0900;" />
                     </div>
-                    <div class="col-sm-8">
+                    <div class="col-sm-6">
                     </div>
                     <div class="col-sm-2">
                         <p>
-                            <button id="daochu" name="批量导出" type="button" class="btn btn-block btn-outline btn-success">原文批量导出</button>
+                            <button id="daochu" name="添加用户" type="button" class="btn btn-block btn-outline btn-success">添加用户</button>
                         </p>
                     </div>
                     <div class="col-sm-2">
                         <p>
-                            <button id="daochu" name="批量导出" type="button" class="btn btn-block btn-outline btn-danger">翻译批量导出</button>
+                            <button id="daochu" name="锁定用户" type="button" class="btn btn-block btn-outline btn-warning">锁定用户</button>
+                        </p>
+                    </div>
+                    <div class="col-sm-2">
+                        <p>
+                            <button id="daochu" name="删除用户" type="button" class="btn btn-block btn-outline btn-danger">删除用户</button>
                         </p>
                     </div>
                 </div>
-            </div>
+{#            </div>#}
 {#        </div>#}
-{#        </div>#}
+        </div>
     </div>
 {% endblock %}
 
@@ -114,30 +120,5 @@
             $("input[name='radio2']").prop("checked",false);
         }
     })
-    </script>
-    <script>
-        $(function (){
-            $("#daochu").click(function(){
-                var idlist = [];
-                $("input[name='radio2']").each(function () {
-                    if ($(this).is(":checked") == true) {
-                        var id = $(this).val()
-                        idlist.push(id)
-                    }
-                })
-                console.log(idlist)
-                $.ajax({
-                     type:"POST",
-                     url:"{% url 'api_mult_download' %}",
-                     data:JSON.stringify({'data':idlist,'article':'osac'}),
-                     datatype:'json',
-                     success: function(data){
-                     	 console.log(data)
-                         console.log(data.filename,data.filepath)
-                         location.href = '{% url 'download_file' %}?filepath='+data.filepath+'&filename='+data.filename
-                     }
-                })
-             });
-        });
     </script>
 {% endblock %}

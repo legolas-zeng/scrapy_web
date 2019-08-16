@@ -48,3 +48,19 @@ def QuerySearch(article,title,startdate,enddate):
 	data = querys.query(sql)
 	querys.close()
 	return data
+
+# 文章无标题搜索
+def QuerySearchNoTitle(article,startdate,enddate):
+	querys = Rrjc_DB()
+	sql = "select * from %s where  create_date >= '%s' and '%s'>= create_date " % (article,startdate,enddate)
+	print(sql)
+	data = querys.query(sql)
+	querys.close()
+	return data
+
+def QueryUserList():
+	querys = Rrjc_DB()
+	sql = "select * from customer"
+	data = querys.query(sql)
+	querys.close()
+	return data

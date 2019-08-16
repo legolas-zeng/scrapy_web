@@ -118,22 +118,6 @@ def api_download(request):
 	# 	data = mondaq.objects.filter(id=id).values()
 	# 	excel_name = 'mondaq_'+id
 	# 	filepath = downloadexcel.HandleData(data[0],excel_name)
-	# elif article == 'osac':
-	# 	data = osac.objects.filter(id=id).values()
-	# 	excel_name = 'osac_' + id
-	# 	filepath = downloadexcel.HandleData(data[0], excel_name)
-	# elif article == 'grada':
-	# 	data = grada.objects.filter(id=id).values()
-	# 	excel_name = 'grada_' + id
-	# 	filepath = downloadexcel.HandleData(data[0], excel_name)
-	# elif article == 'cnn':
-	# 	data = cnn.objects.filter(id=id).values()
-	# 	excel_name = 'cnn_' + id
-	# 	filepath = downloadexcel.HandleData(data[0], excel_name)
-	# elif article == 'anvilgroup':
-	# 	data = anvilgroup.objects.filter(id=id).values()
-	# 	excel_name = 'anvilgroup_' + id
-	# 	filepath = downloadexcel.HandleData(data[0], excel_name)
 	
 	file = open(filepath, 'rb')
 	response = FileResponse(file)
@@ -157,15 +141,19 @@ def api_mult_download(request):
 		return JsonResponse(context)
 		
 
-def api_translate(request,tempalte='newsweb/translated.html'):
+# 翻译接口
+def api_translate(request,template='newsweb/translated.html'):
 	id = request.GET['id']
 	article = request.GET['article']
-	tran_title, tran_content = handletranslate.handledata(id, article)
+	tran_title, tran_content,authors, tags,article_time = handletranslate.handledata(id, article)
 	context = {
 		'req': tran_title,
 		'content': tran_content,
+		'authors':authors,
+		'tags':tags,
+		'article_time':article_time,
 	}
-	return render(request, tempalte, context)
+	return render(request, template, context)
 
 def download_file(request):
 	filepath = request.GET['filepath']

@@ -23,7 +23,7 @@
                              </span>
                             <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                             <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold">{{request.user.last_name}}{{ request.user.first_name }}</strong>
-                             </span> <span class="text-muted text-xs block">{% if request.user.is_staff %}超级用户{% else %}普通用户{% endif %}<b class="caret"></b></span> </span> </a>
+                             </span> <span class="text-muted text-xs block">{% if request.user.is_superuser %}超级用户{% elif request.user.is_staff%}管理员{% else %}普通用户{% endif %}<b class="caret"></b></span> </span> </a>
                             <ul class="dropdown-menu animated fadeInRight m-t-xs">
                                 <li><a href="{% url 'logout' %}">退出登录</a></li>
                             </ul>
@@ -45,12 +45,14 @@
                     <li class="{% block nav_search %}{% endblock %}">
                         <a href="{% url 'searchpage' %}"><i class="fa fa-diamond"></i> <span class="nav-label">搜索</span></a>
                     </li>
-                    <li class="{% block nav_permission %}{% endblock %}">
+                    {% if request.user.is_staff %}
+                    <li class="{% block nav_customer %}{% endblock %}">
                         <a href="index.html"><i class="fa fa-th-large"></i> <span class="nav-label">权限管理</span> <span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
-                            <li class="{% block nav_user %}{% endblock %}"><a href="{% url 'mondaq_list' %}">用户管理</a></li>
+                            <li class="{% block nav_user %}{% endblock %}"><a href="{% url 'user_list' %}">用户管理</a></li>
                         </ul>
                     </li>
+                    {% endif %}
                 </ul>
             </div>
         </nav>
@@ -70,11 +72,13 @@
                 <li>
                     <span class="m-r-sm text-muted welcome-message">欢迎来到爬虫数据展示中心</span>
                 </li>
+                {% if request.user.is_superuser %}
                 <li>
-                <a href="admin" target="_blank">
-                    <i class="fa fa-sign-out"></i> 后台管理
-                </a>
-            </li>
+                    <a href="admin" target="_blank">
+                        <i class="fa fa-sign-out"></i> 后台管理
+                    </a>
+                </li>
+                {% endif %}
             </ul>
         </nav>
         </div>
