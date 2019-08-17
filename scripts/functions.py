@@ -84,8 +84,8 @@ def UpdataUser(id,handle):
 		sql = "update customer set is_active=1 where id=%s" % id
 	if handle == 'deluser':
 		sql = "delete from customer where id=%s" % id
-	if handle == 'unlockuser':
-		sql = "update customer set is_active=1 where id=%s" % id
+	# if handle == 'unlockuser':
+	# 	sql = "update customer set is_active=1 where id=%s" % id
 	print(sql)
 	data = querys.update(sql)
 	querys.close()

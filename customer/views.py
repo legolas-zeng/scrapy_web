@@ -10,8 +10,10 @@ import json
 
 def user_list(request,template='customer/userlist.html'):
 	'''
-	is_staff：判断用户是否拥有网站的管理权限
+	is_staff：判断用户是否是管理员
 	is_active：判断是否允许用户登陆，设置为“False”时可以不用删除用户来禁止用户登陆
+	is_vip_type：判断VIP会员的类型，默认都是0
+	is_superuser：超级用户，最高权限
 	'''
 	# data = User.objects.all().values()
 	# print(request.user)
@@ -25,6 +27,7 @@ def user_add(request,template='customer/useradd.html'):
 	
 	return render(request, template)
 def api_add_user():
+	# TODO 这里要关联django的user表的，还没弄
 	pass
 
 @csrf_exempt
@@ -43,6 +46,7 @@ def api_handle_user(request):
 		'''
 		for id in id_list:
 			functions.UpdataUser(id,handle)
+			#TODO 操作完customer表还要再操作user表，待续.....
 	context = {
 		'msg': '操作成功！！',
 		'status': 1
