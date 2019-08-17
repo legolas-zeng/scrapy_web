@@ -21,19 +21,30 @@ def user_list(request,template='customer/userlist.html'):
 	}
 	return render(request, template ,context)
 
-def user_add(request,template='customer/userlist.html'):
+def user_add(request,template='customer/useradd.html'):
+	
+	return render(request, template)
+def api_add_user():
 	pass
 
 @csrf_exempt
-def api_lock_user(request):
+def api_handle_user(request):
 	if request.method == 'POST':
 		req = json.loads(request.body)
+		print(req)
 		id_list = req.get('id_list')
-		print(id_list)
+		handle = req.get('handle')
+		'''
+		handle 操作分为：
+		1、添加用户 adduser
+		2、锁定用户 lockuser
+		3、解锁用户 unlockuser
+		4、删除用户 deluser
+		'''
 		for id in id_list:
-			functions.UpdataUser(id)
+			functions.UpdataUser(id,handle)
 	context = {
-		'msg': '用户已被锁定',
+		'msg': '操作成功！！',
 		'status': 1
 	}
 	return JsonResponse(context)

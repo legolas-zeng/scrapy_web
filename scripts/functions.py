@@ -66,6 +66,7 @@ def QueryUserList():
 	querys.close()
 	return data
 
+# 查询VIP类型
 def QueryVipType(name):
 	querys = Rrjc_DB()
 	sql = "select is_vip_type from customer where is_username='%s'"%name
@@ -74,5 +75,18 @@ def QueryVipType(name):
 	querys.close()
 	return data
 
-def UpdataUser(id):
-	pass
+
+def UpdataUser(id,handle):
+	querys = Rrjc_DB()
+	if handle == 'lockuser':
+		sql = "update customer set is_active=0 where id=%s"%id
+	if handle == 'unlockuser':
+		sql = "update customer set is_active=1 where id=%s" % id
+	if handle == 'deluser':
+		sql = "delete from customer where id=%s" % id
+	if handle == 'unlockuser':
+		sql = "update customer set is_active=1 where id=%s" % id
+	print(sql)
+	data = querys.update(sql)
+	querys.close()
+	return data
