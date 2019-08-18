@@ -26,9 +26,18 @@ def user_list(request,template='customer/userlist.html'):
 def user_add(request,template='customer/useradd.html'):
 	
 	return render(request, template)
-def api_add_user():
+
+@csrf_exempt
+def api_add_user(request):
 	# TODO 这里要关联django的user表的，还没弄
-	pass
+	if request.method == 'POST':
+		req = json.loads(request.body)
+		print(req)
+	context = {
+		'msg': '操作成功！！',
+		'status': 1
+	}
+	return JsonResponse(context)
 
 @csrf_exempt
 def api_handle_user(request):

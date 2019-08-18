@@ -135,6 +135,14 @@
                 var is_staff = document.getElementById("is_staff").checked;
                 var is_active = document.getElementById("is_active").checked;
                 console.log(UserName,PassWord,Email,vip,is_staff,is_active)
+                var Postdata = {
+                    'UserName': UserName,
+                    'PassWord': PassWord,
+                    'Email': Email,
+                    'vip': vip,
+                    'is_staff': is_staff,
+                    'is_active': is_active,
+                }
                 if (UserName=='')
                 {
                     toastr.error('请输入用户名！！！！')
@@ -144,8 +152,49 @@
                 }
                  else if (Email==''){
                     toastr.error('请输入Email！！！！')
+                }else {
+	                swal({
+			                title: "确定要创建这个用户吗？",
+			                //text: "删除后可就无法恢复了。",
+			                //type: "warning",
+			                imageUrl: "/static/img/inquiry.png",
+			                imageSize: "120x120",
+			                showCancelButton: true,
+			                closeOnConfirm: false,
+			                confirmButtonText: "确定",
+			                confirmButtonColor: "#ec6c62",
+			                cancelButtonText: "再考虑下",
+			                allowEscapeKey: true,
+		                },
+		                function (isConfirm) {
+			                if (!isConfirm) return;
+			                $.ajax({
+				                type: "post",
+				                url: '/api_add_user/',
+				                data: JSON.stringify(Postdata),
+				                success: function (data) {
+					                console.log(data)
+					                if (data.status = 1) {
+						                swal({
+							                title: "提交成功",
+							                text: "这个用户已经添加好啦。",
+							                imageUrl: "/static/img/success.png",
+							                imageSize: "120x120",
+						                })
+					                } else {
+						                swal("出错啦。。。", "请排查问题", "error");
+					                }
+				                },
+				                error: function () {  // ajax请求失败
+					                swal({
+						                title: "请联系运维小哥哥",
+						                imageUrl: "/static/img/error.jpg",
+						                imageSize: "140x140",
+					                });
+				                }
+			                })
+		                })
                 }
-             {#   TODO 这里还没有完成啊。。。#}
 	        })
         })
     </script>
