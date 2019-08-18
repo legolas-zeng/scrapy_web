@@ -20,7 +20,7 @@
                             <th style="width:20px;text-align:center;">用户名</th>
                             <th style="width:10px;text-align:center;">管理员</th>
                             <th style="width:10px;text-align:center;">是否激活</th>
-                            <th style="width:10px;text-align:center;">超级用户</th>
+                            <th style="width:10px;text-align:center;">会员</th>
                             <th style="width:20px;text-align:center;">单选</th>
                         </tr>
                         </thead>
@@ -29,9 +29,9 @@
                         <tr>
                             <td align="center">{{ info.id }}</td>
                             <td align="center">{{ info.is_username }}</td>
-                            <td align="center">{% if info.is_staff %}<p><span class="badge badge-primary">管理员</span></p>{% else %}<p><span class="badge">普通用户</span></p>{% endif %}</td>
-                            <td align="center">{% if info.is_active %}<p><span class="badge badge-warning">已激活</span></p>{% else %}<p><span class="badge">未激活</span></p>{% endif %}</td>
-                            <td align="center">{{ info.is_superuser }}</td>
+                            <td align="center">{% if info.is_superuser %}<p><span class="badge badge-danger">超级管理员</span></p>{% elif info.is_staff %}<p><span class="badge badge-primary">管理员</span></p>{% else %}<p><span class="badge">普通用户</span></p>{% endif %}</td>
+                            <td align="center">{% if info.is_active %}<p><span class="badge badge-info">已激活</span></p>{% else %}<p><span class="badge">未激活</span></p>{% endif %}</td>
+                            <td align="center">{% if info.is_vip_type == 1 %}<p><span class="badge badge-warning">管理员VIP</span></p>{% elif info.is_vip_type == 2 %}<p><span class="badge badge-warning">VIP</span></p>{% else %}<p><span class="badge">普通会员</span></p>{% endif %}</td>
                             <td align="center">
                                 {% if request.user.is_superuser %}
                                     <input type="checkbox"  name="ip_list" value="{{ info.id }}" data-number="#">
@@ -52,7 +52,7 @@
                             <th style="width:20px;text-align:center;">用户名</th>
                             <th style="width:10px;text-align:center;">管理员</th>
                             <th style="width:10px;text-align:center;">是否激活</th>
-                            <th style="width:10px;text-align:center;">超级用户</th>
+                            <th style="width:10px;text-align:center;">会员</th>
                             <th style="width:20px;text-align:center;">单选</th>
                         </tr>
                         </tfoot>

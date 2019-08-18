@@ -8,8 +8,9 @@ from scripts.mysql_connect import Rrjc_DB
 from newsweb import action
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
-from django.core.urlresolvers import reverse
-
+# django1.11版本旧方法
+# from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 @csrf_exempt
 def Login(request,template='newsweb/login.html'):
@@ -42,43 +43,48 @@ def Logout(request):
 
 
 def mondaq_list(request,template="newsweb/mondaq.html"):
-	data = functions.Query('mondaq')
+	data1, data2 = functions.Query('mondaq')
 	username = request.user
 	is_vip_type = functions.QueryVipType(username)
 	print(is_vip_type)
 	context = {
-		'data': data,
-		'is_vip_type':is_vip_type[0].get('is_vip_type'),
+		'data': data1,
+		'count': data2[0].get('count(0)'),
+		# 'is_vip_type':is_vip_type[0].get('is_vip_type'),
 	}
 	return render(request, template,context)
 
 
 def osac_list(request,template="newsweb/osac.html"):
     # data = osac.objects.all().values()
-    data = functions.Query('osac')
+    data1, data2 = functions.Query('osac')
     context = {
-        'data': data
+        'data': data1,
+	    'count': data2[0].get('count(0)'),
     }
     return render(request, template,context)
 
 def grada_list(request,template="newsweb/grada.html"):
-	data = functions.Query('grada')
+	data1, data2 = functions.Query('grada')
 	context = {
-		'data': data
+		'data': data1,
+		'count': data2[0].get('count(0)'),
 	}
 	return render(request, template, context)
 
 def cnn_list(request,template="newsweb/cnn.html"):
-	data = functions.Query('cnn')
+	data1, data2 = functions.Query('cnn')
 	context = {
-		'data': data
+		'data': data1,
+		'count': data2[0].get('count(0)'),
 	}
 	return render(request, template, context)
 
 def anvilgroup_list(request,template="newsweb/anvilgroup.html"):
-	data = functions.Query('anvilgroup')
+	data1, data2 = functions.Query('anvilgroup')
 	context = {
-		'data': data
+		'data': data1,
+		'count': data2[0].get('count(0)'),
 	}
 	return render(request, template, context)
     

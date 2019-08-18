@@ -4,9 +4,9 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse,HttpResponseRedirect, FileResponse
 import json
 from search import action
-from django.core.urlresolvers import reverse
-
-# Create your views here.
+# from django.core.urlresolvers import reverse
+from django.urls import reverse
+from scripts import functions
 
 
 def ip_search(request):
@@ -41,3 +41,21 @@ def seek(request):
 	if request.method == 'POST':
 		req = json.loads(request.body)
 		return HttpResponseRedirect(reverse(action.action_search, args=[req, ]))
+	
+
+def pagelist(request,template="newsweb/page.html"):
+	page = request.GET['page']
+	article = request.GET['article']
+	DisplayPage = 10
+	print(page,article)
+	startpage = DisplayPage*int(page)
+	endpage = DisplayPage*(int(page)+1)
+	data1, data2 = functions.QueryPage(article,startpage,endpage)
+	context = {
+		'data': data1,
+		'count': data2[0].get('count(0)'),
+		'pagenext':int(page)+1,
+		'article':article,
+		# 'is_vip_type':is_vip_type[0].get('is_vip_type'),
+	}
+	return render(request, template,context)

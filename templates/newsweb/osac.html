@@ -10,6 +10,16 @@
 {% block re_content %}
     <div class="row">
         <div class="col-lg-12">
+        <div>
+            <h5>查询到数据{{ count }}条
+                {% if count > 100 %}，为了优化体验，只显示100条
+                <button type="button" class="btn btn-primary btn-xs" id="next1000" value="1">
+{#                    <a href="{% url 'page_mondaq_list' %}?article=mondaq&page=2">下1000条</a>#}
+                    <a href="{% url 'pagelist' %}?page=2&article=osac">下100条</a>
+                </button>
+                {% endif %}
+            </h5>
+        </div>
 {#            <div class="ibox float-e-margins">#}
 {#            <div class="ibox-content">#}
                 <div class="table-responsive">

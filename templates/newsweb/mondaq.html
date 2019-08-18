@@ -5,11 +5,40 @@
 {% block head %}
 <title>爬虫数据展示</title>
 <link href="/static/css/plugins/dataTables/datatables.min.css" rel="stylesheet">
+<style type="text/css">
+<!--
+a:link {
+font-size: 12px;
+color: #000000;
+text-decoration: none;
+}
+a:visited {
+font-size: 12px;
+color: #000000;
+text-decoration: none;
+}
+a:hover {
+font-size: 12px;
+color: #999999;
+text-decoration: underline;
+}
+</style>
 {% endblock %}
 
 {% block re_content %}
     <div class="row">
         <div class="col-lg-12">
+        <div>
+            <h5>查询到数据{{ count }}条
+                {% if count > 100 %}，为了优化体验，只显示100条
+                <button type="button" class="btn btn-primary btn-xs" id="next1000" value="1">
+{#                    <a href="{% url 'page_mondaq_list' %}?article=mondaq&page=2">下1000条</a>#}
+                    <a href="{% url 'pagelist' %}?page=2&article=mondaq">下1000条</a>
+                </button>
+                {% endif %}
+            </h5>
+        </div>
+
 {#            <div class="ibox float-e-margins">#}
 {#                <div class="ibox-content">#}
                     <div class="table-responsive">
@@ -143,4 +172,13 @@
              });
         });
     </script>
+
+{#    <script>#}
+{#        $(function (){#}
+{#            $("#next1000").click(function(){#}
+{#                var page = $("#next1000").val()#}
+{#                console.log(page)#}
+{#            })#}
+{#        })#}
+{#    </script>#}
 {% endblock %}

@@ -8,10 +8,22 @@ from scripts.mysql_connect import Rrjc_DB
 # 文章列表展示
 def Query(article):
 	querys = Rrjc_DB()
-	sql = 'select * from %s'%article
-	data = querys.query(sql)
+	sql1 = 'select * from %s' %article
+	sql2 = 'select count(0) from %s' %article # 查询有多少条数据
+	data1 = querys.query(sql1)
+	data2 = querys.query(sql2)
 	querys.close()
-	return data
+	return data1,data2
+
+# 按页查询
+def QueryPage(article,pagestart,pageend):
+	querys = Rrjc_DB()
+	sql1 = 'select * from %s limit %s,%s'%(article,pagestart,pageend)
+	sql2 = 'select count(0) from %s' %article # 查询有多少条数据
+	data1 = querys.query(sql1)
+	data2 = querys.query(sql2)
+	querys.close()
+	return data1,data2
 
 # 文章详细页
 def QueryArticle(article,id):
@@ -75,7 +87,7 @@ def QueryVipType(name):
 	querys.close()
 	return data
 
-
+# 更新用户信息
 def UpdataUser(id,handle):
 	querys = Rrjc_DB()
 	if handle == 'lockuser':
@@ -90,3 +102,38 @@ def UpdataUser(id,handle):
 	data = querys.update(sql)
 	querys.close()
 	return data
+
+def AddUser(id,UserName,vip,staff,active):
+	querys = Rrjc_DB()
+	'''
+	is_vip_type:
+		默认为0，普通非vip用户
+		管理员1，管理员的vip权限
+		vip2，充值用户
+	is_staff：
+		默认0，false，非管理员
+		1，ture，管理员
+	is_active：
+		默认1，ture，激活状态
+		0，false，未激活
+	is_superuser：
+		默认0，false，非超级管理员
+		1，ture，超级管理员
+	'''
+	if not vip:
+		is_vip_type = 0
+	else:
+		is_vip_type = 2
+	if not staff:
+		is_staff = 0
+	else:
+		is_staff = 1
+	if not active:
+		is_active = 0
+	else:
+		is_active = 1
+	sql = "INSERT INTO customer (`id`,`is_username`,`is_group`,`is_vip_type`,`is_staff`,`is_active`,`is_superuser`)VALUES('%s','%s','1','%s','%s','%s','0');"%(id,UserName,is_vip_type,is_staff,is_active)
+	print(sql)
+	data = querys.insert_one(sql)
+	print(data)
+	querys.close()

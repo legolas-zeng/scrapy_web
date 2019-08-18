@@ -4,6 +4,7 @@ from scripts import functions
 from django.http import HttpResponse,HttpResponseRedirect,JsonResponse,request,Http404
 from django.views.decorators.csrf import csrf_exempt
 import json
+from django.contrib.auth.models import User
 
 # Create your views here.
 
@@ -33,10 +34,30 @@ def api_add_user(request):
 	if request.method == 'POST':
 		req = json.loads(request.body)
 		print(req)
-	context = {
-		'msg': '操作成功！！',
-		'status': 1
-	}
+		UserName = req.get('UserName')
+		PassWord = req.get('PassWord')
+		Email = req.get('Email')
+		vip = req.get('vip')
+		is_staff = req.get('is_staff')
+		is_active = req.get('is_active')
+		check_name = User.objects.filter(username__exact=UserName)
+		if not check_name:
+			print("通过重名检测")
+			user = User.objects.create_user(UserName,'xxxxxxx@qq.com', PassWord)
+			id = User.objects.filter(username__exact=UserName).values('id')
+			print(id[0].get('id'))
+			user.save()
+			functions.AddUser(id[0].get('id'),UserName,vip,is_staff,is_active)
+			context = {
+				'msg': '操作成功！！',
+				'status': '1'
+			}
+		else:
+			print("没有通过检测")
+			context = {
+				'msg': '用户名重复！！',
+				'status': '0'
+			}
 	return JsonResponse(context)
 
 @csrf_exempt
@@ -55,7 +76,8 @@ def api_handle_user(request):
 		'''
 		for id in id_list:
 			functions.UpdataUser(id,handle)
-			#TODO 操作完customer表还要再操作user表，待续.....
+			if handle == 'deluser':
+				User.objects.filter(id=id).delete()
 	context = {
 		'msg': '操作成功！！',
 		'status': 1

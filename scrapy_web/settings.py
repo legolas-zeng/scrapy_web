@@ -87,7 +87,7 @@ WSGI_APPLICATION = 'scrapy_web.wsgi.application'
 DATABASES = {
     'default':{
         'ENGINE': 'django.db.backends.mysql',
-                'NAME': 'article_source',
+                'NAME': 'django',
                 'USER': 'root',
                 'PASSWORD': 'qq1005521',
                 'HOST': '127.0.0.1',

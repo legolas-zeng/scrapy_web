@@ -147,7 +147,7 @@
                 {
                     toastr.error('请输入用户名！！！！')
                 }
-                else if (PassWord==''){
+                else if (PassWord=='' ){ //这里还要判断密码长度
                     toastr.error('请输入密码！！！！')
                 }
                  else if (Email==''){
@@ -174,7 +174,7 @@
 				                data: JSON.stringify(Postdata),
 				                success: function (data) {
 					                console.log(data)
-					                if (data.status = 1) {
+					                if (data.status == '1') {
 						                swal({
 							                title: "提交成功",
 							                text: "这个用户已经添加好啦。",
@@ -182,7 +182,7 @@
 							                imageSize: "120x120",
 						                })
 					                } else {
-						                swal("出错啦。。。", "请排查问题", "error");
+						                swal("出错啦。。。", data.msg, "error");
 					                }
 				                },
 				                error: function () {  // ajax请求失败
