@@ -18,12 +18,9 @@ urlpatterns = [
 	url(r'grada_list',views.grada_list,name='grada_list'),
 	url(r'cnn_list',views.cnn_list,name='cnn_list'),
 	url(r'anvilgroup_list',views.anvilgroup_list,name='anvilgroup_list'),
-	
 	url(r'pagelist',sv.pagelist,name='pagelist'),
 	
-	
-	
-    
+
     # 文章详情页
 	url(r'display$',views.dispaly,name='display'),
 	# url(r'article_list$',views.article_list,name='article_list'),
@@ -41,6 +38,8 @@ urlpatterns = [
 	# 权限类
 	url(r'^login$',views.Login,name='login'),
 	url(r'^logout', views.Logout, name='logout'),
+	url(r'^changepasswd', cv.changepasswd, name='changepasswd'),
+
 	
 	# 搜索类
 	url(r'^ip_search$', sv.ip_search, name='ip_search'),

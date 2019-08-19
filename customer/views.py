@@ -5,6 +5,9 @@ from django.http import HttpResponse,HttpResponseRedirect,JsonResponse,request,H
 from django.views.decorators.csrf import csrf_exempt
 import json
 from django.contrib.auth.models import User
+from django.contrib.auth import authenticate
+from django.urls import reverse
+from django.contrib.auth.hashers import make_password, check_password
 
 # Create your views here.
 
@@ -83,3 +86,35 @@ def api_handle_user(request):
 		'status': 1
 	}
 	return JsonResponse(context)
+
+@csrf_exempt
+def changepasswd(request,template='customer/changepasswd.html'):
+	msg = ''
+	if request.method == 'POST':
+		password = request.GET['oldpassward']
+		newpassward = request.GET['newpassward']
+		renewpassward = request.GET['renewpassward']
+		username = request.user
+		print(password,newpassward,renewpassward,username)
+		user = authenticate(username=username, password=password)
+		if user is not None:
+			if user.is_active:
+				if newpassward != renewpassward:
+					msg = "两次新密码输入的不一样"
+				else:
+					user = User.objects.get(username=request.POST.get('username'))
+					if user:
+						if check_password(request.POST.get('password'), user.password):
+							user.password = make_password(newpassward)
+							user.save()
+							return HttpResponseRedirect(reverse('index'))
+			else:
+				msg = "用户已被禁用"
+		else:
+			msg = '旧密码错误'
+	context = {
+		'msg': msg,
+	}
+		
+	return render(request,template, context)
+

@@ -2,20 +2,12 @@
 
 import pymysql
 
-CENTERDB_INFO = {
-	'host': 'localhost',
-	'user': 'zwa',
-	'pwd': 'qq1005521',
-	'dbname': 'article_source',
-	'port': 3306
-}
-
 class Rrjc_DB(object):
 	def __init__(self):
-		self.host = '192.168.3.5'
+		self.host = '127.0.0.1'
 		self.port = '3306'
 		self.passwd = 'qq1005521'
-		self.user = 'zwa'
+		self.user = 'root'
 		self.db = 'article_source'
 		self.cursor = self.conn()
 	
