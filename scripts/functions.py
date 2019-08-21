@@ -3,12 +3,13 @@
 # @time: 2019/8/15 22:45
 
 from scripts.mysql_connect import Rrjc_DB
+import re
 
 
 # 文章列表展示
 def Query(article):
 	querys = Rrjc_DB()
-	sql1 = 'select * from %s' %article
+	sql1 = 'select * from %s limit 1000' %article
 	sql2 = 'select count(0) from %s' %article # 查询有多少条数据
 	data1 = querys.query(sql1)
 	data2 = querys.query(sql2)
@@ -30,21 +31,30 @@ def QueryArticle(article,id):
 	querys = Rrjc_DB()
 	sql = 'select * from %s where id=%s' %(article,id)
 	data = querys.query(sql)
-	print(data[0].get('authors'))
+	authors_list = []
+	tags_list = []
+	print('作者列表：',data[0].get('authors'))
 	if data[0].get('authors') == None:
-		authors = ''
+		authors_list = ''
 	else:
-		authors = data[0].get('authors').split('"')[1]
+		# authors = data[0].get('authors').split('"')[1]
+		for j in range(len(data[0].get('authors').split('"'))):
+			if j%2!=0:
+				authors_list.append(data[0].get('authors').split('"')[j])
 	if data[0].get('tags') == None:
 		tags = ''
 	else:
-		tags = data[0].get('tags').split('"')[1]
-	print(authors,tags)
+		# tags = data[0].get('tags').split('"')[1]
+		for j in range(len(data[0].get('tags').split('"'))):
+			if j % 2 != 0:
+				tags_list.append(data[0].get('tags').split('"')[j])
+	print(tags_list)
 	querys.close()
-	return data,authors,tags
+	return data,authors_list,tags_list
 
-# 文章翻译
-def QueryTranslation(article,id):
+# 获取一篇文章
+# def QueryTranslation(article,id):
+def QueryGetOneAriticle(article,id):
 	querys = Rrjc_DB()
 	sql = 'select * from %s where id=%s' % (article, id)
 	data = querys.query(sql)

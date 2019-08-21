@@ -8,7 +8,7 @@ import re
 
 
 def handledata(id,article:str):
-	data = functions.QueryTranslation(article, id)
+	data = functions.QueryGetOneAriticle(article, id)
 	tran_title, tran_content = Translated(data[0])
 	# if article == 'mondaq':
 	# 	data = mondaq.objects.filter(id=id).values()

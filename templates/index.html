@@ -25,6 +25,7 @@
                             <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold">{{request.user.last_name}}{{ request.user.first_name }}</strong>
                              </span> <span class="text-muted text-xs block">{% if request.user.is_superuser %}超级用户{% elif request.user.is_staff%}管理员{% else %}普通用户{% endif %}<b class="caret"></b></span> </span> </a>
                             <ul class="dropdown-menu animated fadeInRight m-t-xs">
+                                <li><a href="{% url "user_info" %}">用户信息</a></li>
                                 <li><a href="{% url 'changepasswd' %}">修改密码</a></li>
                                 <li><a href="{% url 'logout' %}">退出登录</a></li>
                             </ul>
@@ -34,21 +35,28 @@
                         </div>
                     </li>
                     <li class="{% block nav_article %}{% endblock %}">
-                        <a href="index.html"><i class="fa fa-th-large"></i> <span class="nav-label">文章列表</span> <span class="fa arrow"></span></a>
+                        <a href="#"><i class="fa fa-th-large"></i> <span class="nav-label">文章列表</span> <span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li class="{% block nav_mondaq %}{% endblock %}"><a href="{% url 'mondaq_list' %}">mondaq</a></li>
                             <li class="{% block nav_osac %}{% endblock %}"><a href="{% url 'osac_list' %}">osac</a></li>
                             <li class="{% block nav_grada %}{% endblock %}"><a href="{% url 'grada_list' %}">grada</a></li>
                             <li class="{% block nav_cnn %}{% endblock %}"><a href="{% url 'cnn_list' %}">cnn</a></li>
                             <li class="{% block nav_anvilgroup %}{% endblock %}"><a href="{% url 'anvilgroup_list' %}">anvilgroup</a></li>
+                            <li class="{% block nav_chinhphu %}{% endblock %}"><a href="{% url 'chinhphu_list' %}">chinhphu</a></li>
                         </ul>
                     </li>
                     <li class="{% block nav_search %}{% endblock %}">
                         <a href="{% url 'searchpage' %}"><i class="fa fa-diamond"></i> <span class="nav-label">搜索</span></a>
                     </li>
+                    <li class="{% block nav_paging %}{% endblock %}">
+                        <a href="#"><i class="fa fa-th-large"></i> <span class="nav-label">分页显示</span> <span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                            <li class="#"><a href="#">运动竞技</a></li>
+                        </ul>
+                    </li>
                     {% if request.user.is_staff %}
                     <li class="{% block nav_customer %}{% endblock %}">
-                        <a href="index.html"><i class="fa fa-th-large"></i> <span class="nav-label">权限管理</span> <span class="fa arrow"></span></a>
+                        <a href="#"><i class="fa fa-th-large"></i> <span class="nav-label">权限管理</span> <span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li class="{% block nav_user %}{% endblock %}"><a href="{% url 'user_list' %}">用户管理</a></li>
                         </ul>

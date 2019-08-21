@@ -1,22 +1,13 @@
-<!DOCTYPE html>
-<html>
+{% extends "index.html" %}
+{% load static %}
+{#{% block nav_article %}active{% endblock %}#}
+{#{% block nav_mondaq %}active{% endblock %}#}
+{% block head %}
+<title>爬虫数据展示</title>
+<link href="/static/css/plugins/dataTables/datatables.min.css" rel="stylesheet">
+{% endblock %}
 
-<head>
-
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>INSPINIA | Forgot password</title>
-
-    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/static/font-awesome/css/font-awesome.css" rel="stylesheet">
-
-    <link href="/static/css/animate.css" rel="stylesheet">
-    <link href="/static/css/style.css" rel="stylesheet">
-
-</head>
-
-<body class="gray-bg">
+{% block re_content %}
 
     <div class="passwordBox animated fadeInDown">
         <div class="row">
@@ -27,19 +18,19 @@
                         <div class="col-lg-12">
                             <form class="m-t" role="form" action="{% url "changepasswd" %}" method='post'>
                                 <div class="form-group">
-                                    <input name="oldpassward" type="password" class="form-control" placeholder="旧密码" required="">
+                                    <input name="old" type="password" class="form-control" placeholder="旧密码" required="">
                                 </div>
                                 <div class="form-group">
-                                    <input name="newpassward" type="password" class="form-control" placeholder="新密码" required="">
+                                    <input name="new" type="password" class="form-control" placeholder="新密码" required="">
                                 </div>
                                 <div class="form-group">
-                                    <input name="renewpassward" type="password" class="form-control" placeholder="再次输入新密码" required="">
+                                    <input name="renew" type="password" class="form-control" placeholder="再次输入新密码" required="">
                                 </div>
-                                <button type="submit" class="btn btn-primary block full-width m-b">确认修改</button>
-                                {% if msg %}
-                                    <br>
-                                    <span class="text-danger">错误：{{ msg }}</span>
-                                {% endif %}
+{#                                <button type="submit" class="btn btn-primary block full-width m-b">确认修改</button>#}
+{#                                {% if msg %}#}
+{#                                    <br>#}
+{#                                    <span class="text-danger">错误：{{ msg }}</span>#}
+{#                                {% endif %}#}
                             </form>
                         </div>
                     </div>
@@ -48,15 +39,52 @@
         </div>
         <hr/>
         <div class="row">
-            <div class="col-md-6">
-                Copyright Example Company
-            </div>
-            <div class="col-md-6 text-right">
-               <small>© 2014-2015</small>
+            <div class="col-md-12">
+                <button class="btn btn-primary block full-width m-b" id="tijiao">确认修改</button>
             </div>
         </div>
     </div>
 
-</body>
+{% endblock %}
 
-</html>
+{% block js %}
+    <script src="/static/js/jquery-3.1.1.min.js"></script>
+    <script src="/static/js/plugins/toastr/toastr.min.js"></script>
+{% endblock %}
+{% block scripts %}
+<script>
+    $(function (){
+        $("#tijiao").click(function(){
+            var old = $("input[name='old']").val()
+            var newpasswd = $("input[name='new']").val()
+            var renewpasswd = $("input[name='renew']").val()
+            console.log(old,newpasswd,renewpasswd)
+            if (newpasswd != renewpasswd){
+                toastr.error('两次密码输入不相同！！！！')
+            }else if (old == newpasswd) {
+            	toastr.error('旧密码和新密码不能相同！！！！')
+            }else if (old == ''| newpasswd == '') {
+            	toastr.error('密码不能为空！！！！')
+	        }else {
+            	$.ajax({
+                 type:"POST",
+                 url:"{% url 'api_changepasswd' %}",
+                 data:JSON.stringify({'old':old,'newpasswd':newpasswd,'renewpasswd':renewpasswd}),
+                 datatype:'json',
+                 success: function(data) {
+	                 console.log(data.status)
+                     if (data.status = 1) {
+                        console.log("开始跳转。。。")
+                         toastr.success('密码修改成功，准备跳转！！！！')
+                         setTimeout(function(){
+                                window.location.replace("{% url 'login' %}");
+                        },1000);
+
+                     }
+                 }
+                 })
+            }
+        })
+    })
+</script>
+{% endblock %}

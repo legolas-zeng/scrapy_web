@@ -91,23 +91,27 @@ def api_handle_user(request):
 def changepasswd(request,template='customer/changepasswd.html'):
 	msg = ''
 	if request.method == 'POST':
-		password = request.GET['oldpassward']
-		newpassward = request.GET['newpassward']
-		renewpassward = request.GET['renewpassward']
+		print(request)
+		passwd = request.GET['old']
+		newpasswd = request.GET['new']
+		renewpasswd = request.GET['renew']
 		username = request.user
-		print(password,newpassward,renewpassward,username)
-		user = authenticate(username=username, password=password)
+		print(passwd,newpasswd,renewpasswd,username)
+		user = authenticate(username=username, password=passwd)
 		if user is not None:
 			if user.is_active:
-				if newpassward != renewpassward:
+				if newpasswd != renewpasswd:
 					msg = "两次新密码输入的不一样"
 				else:
-					user = User.objects.get(username=request.POST.get('username'))
-					if user:
-						if check_password(request.POST.get('password'), user.password):
-							user.password = make_password(newpassward)
-							user.save()
-							return HttpResponseRedirect(reverse('index'))
+					user.set_password(newpasswd)
+					user.save()
+					return HttpResponseRedirect(reverse('index'))
+					# user = User.objects.get(username=username)
+					# if user:
+					# 	if check_password(request.POST.get('password'), user.password):
+					# 		user.password = make_password(newpasswd)
+					# 		user.save()
+					# 		return HttpResponseRedirect(reverse('index'))
 			else:
 				msg = "用户已被禁用"
 		else:
@@ -118,3 +122,38 @@ def changepasswd(request,template='customer/changepasswd.html'):
 		
 	return render(request,template, context)
 
+@csrf_exempt
+def api_changepasswd(request):
+	msg = ''
+	status = 0
+	if request.method == 'POST':
+		req = json.loads(request.body)
+		passwd = req.get('old')
+		newpasswd = req.get('newpasswd')
+		renewpasswd = req.get('renewpasswd')
+		username = request.user
+		print(passwd, newpasswd, renewpasswd, username)
+		user = authenticate(username=username, password=passwd)
+		if user is not None:
+			if user.is_active:
+				print("符合修改密码的条件。。")
+				# user.set_password(newpasswd)
+				# user.save()
+				msg = "修改完成"
+				status = 1
+				# return HttpResponseRedirect(reverse('index'))
+			else:
+				msg = "用户已被禁用"
+				status = 0
+		else:
+			msg = '旧密码错误'
+			status = 0
+	context = {
+		'data': msg,
+		 'status':status,
+	}
+	
+	return JsonResponse(context)
+
+def user_info(request,template='customer/userinfo.html'):
+	return render(request, template)

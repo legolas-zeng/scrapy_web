@@ -87,6 +87,14 @@ def anvilgroup_list(request,template="newsweb/anvilgroup.html"):
 		'count': data2[0].get('count(0)'),
 	}
 	return render(request, template, context)
+
+def chinhphu_list(request,template="newsweb/chinhphu.html"):
+	data1, data2 = functions.Query('chinhphu')
+	context = {
+		'data': data1,
+		'count': data2[0].get('count(0)'),
+	}
+	return render(request, template, context)
     
 
 def dispaly(request,template="newsweb/dispaly.html"):
@@ -114,6 +122,8 @@ def dispaly(request,template="newsweb/dispaly.html"):
 	           'nav':nav,
 	           'authors':authors,
 	           'tags':tags,}
+	print('1111',authors,tags)
+	print(type(tags))
 	return render(request, template, context)
 
 @csrf_exempt

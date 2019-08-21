@@ -16,7 +16,10 @@ urlpatterns = [
 	url(r'mondaq_list$',views.mondaq_list,name='mondaq_list'),
 	url(r'osac_list',views.osac_list,name='osac_list'),
 	url(r'grada_list',views.grada_list,name='grada_list'),
+	# url(r'grada_display',views.grada_display,name='grada_display'),
 	url(r'cnn_list',views.cnn_list,name='cnn_list'),
+	url(r'anvilgroup_list',views.anvilgroup_list,name='anvilgroup_list'),
+	url(r'chinhphu_list',views.chinhphu_list,name='chinhphu_list'),
 	url(r'anvilgroup_list',views.anvilgroup_list,name='anvilgroup_list'),
 	url(r'pagelist',sv.pagelist,name='pagelist'),
 	
@@ -39,6 +42,7 @@ urlpatterns = [
 	url(r'^login$',views.Login,name='login'),
 	url(r'^logout', views.Logout, name='logout'),
 	url(r'^changepasswd', cv.changepasswd, name='changepasswd'),
+	url(r'^api_changepasswd', cv.api_changepasswd, name='api_changepasswd'),
 
 	
 	# 搜索类
@@ -53,5 +57,6 @@ urlpatterns = [
 	url(r'^api_handle_user', cv.api_handle_user, name='api_handle_user'),
 	url(r'^api_add_user', cv.api_add_user, name='api_add_user'),
 	url(r'^user_add', cv.user_add, name='user_add'),
+	url(r'^user_info', cv.user_info, name='user_info'),
 
 ]

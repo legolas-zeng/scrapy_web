@@ -34,7 +34,15 @@ text-decoration: underline;
                 <div class="ibox-content">
                     <div class="pull-right">
 {#                        {% for i in info.authors %}#}
-                        <button class="btn btn-white btn-xs" type="button">作者：{% if authors == ''  %}无名氏{% else %}{{ authors }}{% endif %}</button>
+                        作者：
+                            {% if authors == '' %}
+                                <button class="btn btn-white btn-xs" type="button">无名氏</button>
+                            {% else %}
+                                {% for au in authors %}
+                                    <button class="btn btn-white btn-xs" type="button">{{ au }}</button>
+                                {% endfor %}
+                            {% endif %}
+
 {#                        {% endfor %}#}
                         <button class="btn btn-info btn-xs" type="button"  value="{{ info.id }}" name="{{ nav }}"><a href="{% url 'api_download' %}?id={{ info.id }}&article={{ nav }}">下载</a></button>
                         <button class="btn btn-info btn-xs" type="button" id="translation"><a href="{% url 'api_translate' %}?id={{ info.id }}&article={{ nav }}">翻译</a></button>
@@ -53,9 +61,9 @@ text-decoration: underline;
                     <div class="row">
                         <div class="col-md-6">
                                 <h5>标签:</h5>
-{#                                {% for tag in info.tags %}#}
-                                <button class="btn btn-primary btn-xs" type="button">{% if tags == ''  %}暂无标签{% else %}{{ tags }}{% endif %}</button>
-{#                                {% endfor %}#}
+                                {% for tag in tags %}
+                                    <button class="btn btn-primary btn-xs" type="button">{{ tag }}</button>
+                                {% endfor %}
                         </div>
                     </div>
                 </div>

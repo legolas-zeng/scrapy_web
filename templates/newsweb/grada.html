@@ -37,7 +37,7 @@
                         {% for info in data %}
                         <tr>
                             <td align="center">{{ info.id }}</td>
-                            <td align="center"><a href ="{% url "display" %}?id={{ info.id }}&article=grada">{{ info.title }}</a></td>
+                            <td align="center"><a href ="{% url "grada_list" %}?id={{ info.id }}&article=grada">{{ info.title }}</a></td>
                             <td align="center">{{ info.create_date }}</td>
                             <td align="center">
                                 <input type="checkbox"  name="radio2" value="{{ info.id }}" data-number="#">
