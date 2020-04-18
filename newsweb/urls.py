@@ -18,7 +18,6 @@ urlpatterns = [
 	url(r'grada_list',views.grada_list,name='grada_list'),
 	# url(r'grada_display',views.grada_display,name='grada_display'),
 	url(r'cnn_list',views.cnn_list,name='cnn_list'),
-	url(r'anvilgroup_list',views.anvilgroup_list,name='anvilgroup_list'),
 	url(r'chinhphu_list',views.chinhphu_list,name='chinhphu_list'),
 	url(r'anvilgroup_list',views.anvilgroup_list,name='anvilgroup_list'),
 	url(r'pagelist',sv.pagelist,name='pagelist'),

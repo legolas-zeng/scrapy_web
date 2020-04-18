@@ -6,7 +6,7 @@ class Rrjc_DB(object):
 	def __init__(self):
 		self.host = '127.0.0.1'
 		self.port = '3306'
-		self.passwd = 'qq1005521'
+		self.passwd = 'web123456'
 		self.user = 'root'
 		self.db = 'article_source'
 		self.cursor = self.conn()
